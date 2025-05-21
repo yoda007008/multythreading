@@ -92,7 +92,6 @@ func MutexCounter() {
 /*
 Задача: Напишите программу, где 10 горутин инкрементируют один счётчик без использования мютексов, через атомики.
 */
-
 func AtomicCounter() {
 	var counter int64
 	var wg sync.WaitGroup
