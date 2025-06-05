@@ -3,30 +3,33 @@ package main
 import (
 	"fmt"
 	"sync"
-	"sync/atomic"
-	"time"
 )
 
-const numRequests = 10000
-
-var count int32
-
-func networkRequest() {
-	time.Sleep(time.Millisecond) // Эмуляция сетевого запроса
-	atomic.AddInt32(&count, 1)
+func getPurchasesByID(url string, id int) bool {
+	// todo простая логика
+	if url == "" || id < 1 {
+		return false
+	}
+	return true
 }
 
 func main() {
-	var wg sync.WaitGroup
-	wg.Add(10000)
+	url := "https://www.wildberries.ru/getPurchasesByID?id=%d"
+	wg := &sync.WaitGroup{}
+	ch := make(chan int, 1)
 
-	for i := 0; i < numRequests; i++ {
-		go func(n int) {
-			defer wg.Done()
-			networkRequest()
-		}(i)
+	for id := range 100_000 {
+		ch <- id
 	}
+	close(ch)
 
+	for i := 0; i < 300; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			resp := getPurchasesByID(url, 1)
+			fmt.Println(resp)
+		}()
+	}
 	wg.Wait()
-	fmt.Println(count)
 }
