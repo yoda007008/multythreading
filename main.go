@@ -1,6 +1,11 @@
 package main
 
+import "fmt"
+
+func goodTask(x, y int) int {
+	return x + y
+}
+
 func main() {
-	m := []int{1, 2, 2, 3, 4}
-	//fmt.Println(BinarySearch(m, 2))
+	fmt.Println(goodTask(2, 3))
 }
